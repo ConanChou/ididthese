@@ -36,3 +36,7 @@ class Work(models.Model):
     achievement = models.TextField(blank=True)
     visible = models.BooleanField()
     user = models.ForeignKey(User)
+
+class tag(models.Model):
+    """docstring for tag"""
+    tag_name = models.CharField(max_length=45)

@@ -11,6 +11,9 @@ class User(models.Model):
     user_address_optional = models.CharField(max_length=100, blank=True)
     tel_number = models.CharField(max_length=20)
     website = models.CharField(max_length=45, blank=True)
+    user_city = models.CharField(max_length=20)
+    user_state = models.CharField(max_length=2)
+    user_zip = models.CharField(max_length=5)
 
 class Settings(models.Model):
     """docstring for Settings"""
@@ -21,6 +24,20 @@ class Settings(models.Model):
 class Tag(models.Model):
     """docstring for tag"""
     tag_name = models.CharField(max_length=45)
+    
+class Achievement(models.Model):
+    description = models.TextField(blank=True)
+    
+class Project(models.Model):
+    project_name = models.CharField(max_length=100)
+    is_pet = models.BooleanField()
+    description = models.TextField(blank=True)
+    role = models.CharField(max_length=100,blank=True)
+    url = models.TextField(blank=True)
+    time = models.DateField('finish time')
+    tags = models.ManyToManyField(Tag)
+    skills = models.ManyToManyField('Skill')
+    
 
 class Award(models.Model):
     """docstring for Award"""
@@ -35,14 +52,15 @@ class Work(models.Model):
     company_name = models.CharField(max_length=60)
     job_title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    company_url = models.CharField(max_length=45)
+    company_url = models.CharField(max_length=45,blank=True)
     start_time = models.DateField()
     end_time = models.DateField()
     location = models.CharField(max_length=100)
-    achievement = models.TextField(blank=True)
+    achievement = models.ForeignKey(Achievement,blank=True)
     visible = models.BooleanField()
     user = models.ForeignKey(User)
     tags = models.ManyToManyField(Tag)
+    projects = models.ForeignKey(Project)
 
 class School(models.Model):
     school_id = models.AutoField(primary_key=True)
@@ -55,7 +73,8 @@ class School(models.Model):
     gpa_profession = models.DecimalField(max_digits=2,decimal_places=1,blank=True)
     visible = models.BooleanField()
     user = models.ForeignKey(User)
-
+    gpa_visible = models.BooleanField()
+    gpa_profession_visible = models.BooleanField()
 
     def __unicode__(self):
         return self.school_name
@@ -68,8 +87,10 @@ class Course(models.Model):
     school = models.ForeignKey(School)
     description = models.TextField(blank=True)
     credits = models.IntegerField()
+    credits_visible = models.BooleanField()
     visible = models.BooleanField()
     tags = models.ManyToManyField(Tag)
+    projects = models.ForeignKey(Project)
 
 class Skill(models.Model):
     skill_name = models.CharField(max_length=50)
@@ -79,13 +100,7 @@ class Skill(models.Model):
     catagory = models.CharField(max_length=50)
     tags = models.ManyToManyField(Tag)
 
-class Project(models.Model):
-    project_name = models.CharField(max_length=100)
-    is_pet = models.BooleanField()
-    description = models.TextField(blank=True)
-    role = models.CharField(max_length=100,blank=True)
-    url = models.TextField(blank=True)
-    time = models.DateField('finish time')
-    work = models.ForeignKey(Work)
-    tags = models.ManyToManyField(Tag)
+
+    
+
 

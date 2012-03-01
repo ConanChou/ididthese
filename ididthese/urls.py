@@ -2,8 +2,13 @@ from django.conf.urls.defaults import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
-from cvs.views import *
+from cvs.views import index
+from django.conf import settings
+
+import logging
+
 admin.autodiscover()
+#logging.debug(settings.MEDIA_ROOT)
 
 urlpatterns = patterns('',
     # Examples:
@@ -17,3 +22,9 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', index),
 )
+if settings.DEBUG:
+    
+    urlpatterns += patterns('',
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve',  
+         {'document_root': settings.MEDIA_ROOT}),
+    )
